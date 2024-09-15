@@ -27,7 +27,7 @@ questions = [q1, q2, q3, q4]
 radio_btns = [r_btn1, r_btn2, r_btn3, r_btn4]
 
 count_right = 0
-got_wrong = 0
+count_wrong = 0
 count_all = 0
 
 def new_question():
@@ -46,8 +46,9 @@ new_question()
 
 def check_ans():
     global count_all, count_right, count_wrong
+    radio_button_group.setExclusive(False)
     for btn in radio_btns:
-        if btn.is_checked():
+        if btn.isChecked():
             if btn.text() == cur_quest.answer:
                 count_right += 1
                 count_all += 1
@@ -60,6 +61,20 @@ def check_ans():
         count_wrong += 1
         count_all += 1
 radio_button_group.setExclusive(True)
+
+def next_question():
+    if btn_answer.text() == 'Відповісти':
+        check_ans()
+        answer_group_box.hide()
+        result_group_box.show()
+        btn_answer.setText('Наступне запитання')
+    elif btn_answer.text() == 'Наступне запитання':
+        new_question()
+        result_group_box.hide()
+        answer_group_box.show()
+        btn_answer.setText('Відповісти')
+
+
 
 
 
@@ -76,6 +91,7 @@ def to_main():
     menu_window.hide()
     main_window.show()
 
+btn_answer.clicked.connect(next_question)
 btn_menu.clicked.connect(to_menu)
 btn_back.clicked.connect(to_main)
 app.exec_()
